@@ -1,5 +1,7 @@
 from datetime import datetime
-from pydantic import BaseModel,field_validator
+from pydantic import BaseModel
+
+
 class Trade(BaseModel):
     """
     "symbol": "MATIC/USD",
@@ -10,6 +12,7 @@ class Trade(BaseModel):
             "trade_id": 4665906,
             "timestamp": "2023-09-25T07:49:37.708706Z"
     """
+
     pair: str
     price: float
     volume: float
@@ -31,10 +34,12 @@ class Trade(BaseModel):
             timestamp=timestamp,
             timestamp_ms=cls._datestr2milliseconds(timestamp),
         )
-    
+
     @staticmethod
     def _datestr2milliseconds(datestr: str) -> int:
-        return int(datetime.strptime(datestr, '%Y-%m-%dT%H:%M:%S.%fZ').timestamp() * 1000)
+        return int(
+            datetime.strptime(datestr, "%Y-%m-%dT%H:%M:%S.%fZ").timestamp() * 1000
+        )
 
     def to_str(self) -> str:
         # pydantic method to convert the model to a dict
