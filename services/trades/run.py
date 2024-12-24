@@ -37,7 +37,7 @@ def main(
                 # serialize the trade as bytes
                 message = topic.serialize(
                     key=trade.pair,
-                    value=trade.to_str(),
+                    value=trade.to_dict(),
                 )
                 # push the serialized message to the topic
                 producer.produce(topic=topic.name, value=message.value, key=message.key)
