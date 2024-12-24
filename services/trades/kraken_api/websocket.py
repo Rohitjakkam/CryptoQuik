@@ -68,7 +68,7 @@ class KrakenWebsocketAPI:
                 }
             )
         )
-        for pair in self.pairs:
+        for _ in self.pairs:
             _ = self._ws_client.recv()
             _ = self._ws_client.recv()
 
