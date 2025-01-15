@@ -52,6 +52,7 @@ def main(
     kafka_output_topic: str,
     kafka_consumer_group: str,
     candle_seconds: int,
+    emit_incomplete_candles: bool,
 ):
     """
     3 steps:
@@ -95,9 +96,12 @@ def main(
         sdf.tumbling_window(timedelta(seconds=candle_seconds))
         # Create a "reduce" aggregation with "reducer" and "initializer" functions
         .reduce(reducer=update_candle, initializer=init_candle)
-        # Emit results only for closed windows
-        .current()
     )
+
+    if emit_incomplete_candles:
+        sdf = sdf.current()
+    else:
+        sdf = sdf.final()
 
     # Extract open, high, low, close, volume, timestamp_ms, and pair from the candle
     sdf["open"] = sdf["value"]["open"]
@@ -146,4 +150,5 @@ if __name__ == "__main__":
         kafka_output_topic=config.kafka_output_topic,
         kafka_consumer_group=config.kafka_consumer_group,
         candle_seconds=config.candle_seconds,
+        emit_incomplete_candles=config.emit_incomplete_candles,
     )
