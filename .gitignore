@@ -174,3 +174,7 @@ certificates/
 *.parquet
 target/
 anthropic.env
+ta-lib/
+ta-lib-0.4.0-src.tar.gz
+ta_lib-0.6.0-cp310-cp310-win_amd64.whl
+ta_lib-0.6.0-cp310-cp310-win32.whl
