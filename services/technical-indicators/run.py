@@ -33,9 +33,8 @@ def main(
     sdf = sdf.apply(update_candles, stateful=True)
 
     sdf = sdf.apply(compute_indicators, stateful=True)
-    sdf = sdf.update(lambda value: logger.debug(f"Final message: {value}"))
 
-    # sdf.update(lambda value: logger.info(f"Candles: {value}"))
+    sdf = sdf.update(lambda value: logger.debug(f"Final message: {value}"))
 
     sdf = sdf.to_topic(output_topic)
 
