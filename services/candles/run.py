@@ -131,6 +131,8 @@ def main(
         ]
     ]
 
+    sdf["candle_seconds"] = candle_seconds
+
     sdf.update(lambda value: logger.info(f"Received trade: {value}"))
     # sdf.update(
     #     lambda value: breakpoint()
