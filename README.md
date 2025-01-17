@@ -3,7 +3,7 @@ Real-time ML System, quick predictions for crypto markets
 
 ## Building a Real-Time ML System
 Together, we will create a real-time machine learning system for predicting cryptocurrency prices. This document outlines the required tools, steps, and progress.
-![CryptoQuik System Diagram](D:\CryptoQuik\media\image.png "ML-System for Real time Crpto Price Prediction")
+![CryptoQuik System Diagram](https://github.com/Rohitjakkam/CryptoQuik/blob/main/media/image.png "ML-System for Real time Crpto Price Prediction")
 
 
 ---
