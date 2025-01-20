@@ -2,10 +2,11 @@ from typing import List
 import json
 from loguru import logger
 from websocket import create_connection
+from .base import TradesAPI
 from .trade import Trade
 
 
-class KrakenWebsocketAPI:
+class KrakenWebsocketAPI(TradesAPI):
     URL = "wss://ws.kraken.com/v2"
 
     def __init__(self, pairs: List[str]):
@@ -39,7 +40,7 @@ class KrakenWebsocketAPI:
             logger.error(f"No `data` field with trades in the message {e}")
             return []
         trades = [
-            Trade.from_kraken_api_response(
+            Trade.from_kraken_websocket_api_response(
                 pair=trade["symbol"],
                 price=trade["price"],
                 volume=trade["qty"],
@@ -50,6 +51,9 @@ class KrakenWebsocketAPI:
         ]
         # breakpoint()
         return trades
+
+    def is_done(self) -> bool:
+        return False
 
     def _subscribe(self):
         """
