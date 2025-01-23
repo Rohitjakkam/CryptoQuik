@@ -76,7 +76,7 @@ class KrakenAPISinglePair(TradesAPI):
             logger.error(f"Failed to parse response as json: {e}")
             return []
 
-        # breakpoint()
+        # TODO: check if we get a an error response. If so, implement a slow-down mechanism
         # get the trades for the self.pair cryptocurrency
         try:
             trades = data["result"][self.pair]
@@ -94,7 +94,7 @@ class KrakenAPISinglePair(TradesAPI):
             for trade in trades
         ]
         # update the since_timestamp_ns
-        self.since_timestamp_ns = float(data["result"]["last"])
+        self.since_timestamp_ns = int(float(data["result"]["last"]))
         # check if we are done
         # TODO: check if this stopping conditions really work
         if self.since_timestamp_ns > int(time.time_ns() - 1000000000):
