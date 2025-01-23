@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import Optional
+from typing import Optional, Literal
 
 
 class Config(BaseSettings):
@@ -10,6 +10,7 @@ class Config(BaseSettings):
     kafka_consumer_group: str
     candle_seconds: int
     emit_incomplete_candles: Optional[bool] = False
+    data_source: Literal["live", "historical", "test"]
 
 
 config = Config()
