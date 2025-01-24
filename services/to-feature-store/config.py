@@ -1,4 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from typing import Literal, Optional
 
 
 class Settings(BaseSettings):
@@ -10,6 +11,9 @@ class Settings(BaseSettings):
     feature_group_version: int
     feature_group_primary_keys: list[str]
     feature_group_event_time: str
+    feature_group_materialization_internal_mintues: Optional[int] = 15
+
+    data_source: Literal["live", "historical", "test"]
 
 
 class HopsworksCredentials(BaseSettings):
