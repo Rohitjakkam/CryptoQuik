@@ -2,8 +2,10 @@ from datetime import datetime, timezone
 
 import hopsworks
 import pandas as pd
+
+# from hopsworks.exceptions import FeatureStoreException
 from loguru import logger
-from quixstreams.sinks.base import BatchingSink, SinkBackpressureError, SinkBatch
+from quixstreams.sinks.base import BatchingSink, SinkBatch
 
 
 class HopsworksFeatureStoreSink(BatchingSink):
@@ -61,14 +63,17 @@ class HopsworksFeatureStoreSink(BatchingSink):
         data = [item.value for item in batch]
         data = pd.DataFrame(data)
 
-        try:
-            # Try to write data to the db
-            self._feature_group.insert(data)
-        except Exception as err:  # Capture the original exception
-            # In case of timeout, tell the app to wait for 30s
-            # and retry the writing later
-            raise SinkBackpressureError(
-                retry_after=30.0,
-                topic=batch.topic,
-                partition=batch.partition,
-            ) from err  # Chain the exception
+        self._feature_group.insert(data)
+
+        # try:
+        #     # Try to write data to the db
+        #     self._feature_group.insert(data)
+        # except Exception as err:  # Capture the original exception
+        #     # In case of timeout, tell the app to wait for 30s
+        #     # and retry the writing later
+
+        #     raise SinkBackpressureError(
+        #         retry_after=30.0,
+        #         topic=batch.topic,
+        #         partition=batch.partition,
+        #     ) from err  # Chain the exception
