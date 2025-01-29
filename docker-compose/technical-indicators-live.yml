@@ -12,10 +12,11 @@ services:
     networks:
       - redpanda_network
     env_file:
-      - ../services/trades/settings.env
+      - ../services/trades/live.settings.env
     environment:
       - KAFKA_BROKER_ADDRESS=redpanda:9092
     restart: always
+
   candles:
     build:
       context: ../services/candles
@@ -23,10 +24,11 @@ services:
     networks:
       - redpanda_network
     env_file:
-      - ../services/candles/settings.env
+      - ../services/candles/live.settings.env
     environment:
       - KAFKA_BROKER_ADDRESS=redpanda:9092
     restart: always
+
   technical-indicators:
     build:
       context: ../services/technical-indicators
@@ -34,10 +36,11 @@ services:
     networks:
       - redpanda_network
     env_file:
-      - ../services/technical-indicators/settings.env
+      - ../services/technical-indicators/live.settings.env
     environment:
       - KAFKA_BROKER_ADDRESS=redpanda:9092
     restart: always
+
   to-feature-store:
     build:
       context: ../services/to-feature-store
@@ -45,7 +48,7 @@ services:
     networks:
       - redpanda_network
     env_file:
-      - ../services/to-feature-store/settings.env
+      - ../services/to-feature-store/live.settings.env
       - ../services/to-feature-store/hopsworks_credentials.env
     environment:
       - KAFKA_BROKER_ADDRESS=redpanda:9092
