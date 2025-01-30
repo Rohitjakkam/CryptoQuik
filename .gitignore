@@ -180,3 +180,4 @@ ta_lib-0.6.0-cp310-cp310-win_amd64.whl
 ta_lib-0.6.0-cp310-cp310-win32.whl
 **/hopsworks_credentials.env
 **/cryptopanic_credentials.env
+**/anthropic_credentials.env
