@@ -11,4 +11,5 @@ dependencies = [
     "pydantic>=2.10.6",
     "quixstreams>=0.5.7",
     "loguru>=0.7.3",
+    "llama-index-llms-ollama>=0.5.2",
 ]
