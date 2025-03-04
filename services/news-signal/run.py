@@ -31,6 +31,7 @@ def main(
             'news': value['title'],
             **llm.get_signal(value['title']),
             'model_name': llm.model_name,
+            'timestamp': value['timestamp'],
         }
     )
     sdf = sdf.update(lambda value: logger.debug(f'Final message: {value}'))
