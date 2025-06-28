@@ -1,29 +1,61 @@
+
+# Create an Application instance with Kafka configs
 from quixstreams import Application
+from loguru import logger
 
-app = Application(
-    broker_address="localhost:31234",
-    consumer_group="example",
-)
+from kraken_api import KrakenAPI, Trade
 
-# Define a topic with a JSON serializer
-topic = app.topic(name="my_topic",value_serializer="json")
+def run(
+    kafka_broker_address: str,
+    kafka_topic_name: str,
+    kraken_api: KrakenAPI,
+):
+    app = Application(
+        broker_address=kafka_broker_address,
+    )
 
-with app.get_producer() as producer:
+    # Define a topic "my_topic" with JSON serialization
+    topic = app.topic(name=kafka_topic_name, value_serializer='json')
 
-    while True:
 
-        # 1. Fake event data
-        event = {"id": "1","text":"Hello ji Namaste!"}
+    # Create a Producer instance
+    with app.get_producer() as producer:
 
-        # 2. Serialize the event data
-        message = topic.serialize(key=event["id"], value=event)
+        while True:
 
-        # 3. Produce the message to the topic
-        producer.produce(
-            topic=topic.name,
-            value=message.value,
-            key=message.key
-        )
+            # 1. Fetch the event from the external API
+            events: list[Trade] = kraken_api.get_trades()
+            # Events received: [Trade(product_id='BTC/EUR', price=91739.8, quantity=0.0018, timestamp='2025-06-28T17:41:29.637621Z'), Trade(product_id='BTC/EUR', price=91739.8, quantity=0.0412816, timestamp='2025-06-28T17:41:29.637621Z')]
+            
 
-        import time
-        time.sleep(1)
+            for event in events:
+                print(f"Event received: {event}")
+                # Event received: product_id='BTC/EUR' price=91739.8 quantity=0.0018 timestamp='2025-06-28T17:41:29.637621Z'
+                # 2. Serialize an event using the defined Topic 
+                message = topic.serialize(
+                    # key=event["id"],
+                    value=event.to_dict()
+                )
+                # Message serialized: <quixstreams.models.messages.KafkaMessage object at 0x7f2e3d415980>
+
+                # 3. Produce a message into the Kafka topic
+                producer.produce(
+                    topic=topic.name,
+                    value=message.value,
+                    # key=message.key
+                )
+
+                logger.info(f'Produced message to topic {topic.name}')
+
+            # breakpoint()
+
+if __name__ == "__main__":
+
+    # create object that can talk to the Kraken API and get us the trade data in real time
+    api = KrakenAPI(product_ids=['BTC/EUR'])
+    
+    run(
+        kafka_broker_address='localhost:31234',
+        kafka_topic_name='trades',
+        kraken_api=api,
+    )
